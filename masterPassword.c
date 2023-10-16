@@ -5,16 +5,20 @@
 #include <time.h>
 #include "header.h"
 
-
 int main(){
-  again:
-  printf("\033[1;31mWELCOME TO MASTER PASSWORD\n\n\n\033[0m");
-  srand(time(0));
   int choice;
-  printf("\033[0;37m1.Create Account.\n\n2.Log In.\033[0m\n\n\033[1;31m3.Exit.\033[0m\n\nChoice: ");
+
+  printf("\033[1;31m\n\nWELCOME TO MASTER PASSWORD\n\n\n\n\033[0m");
+
+  srand(time(0));//this is needed for password generation.
+  
+  again:
+  printf("\033[1;37m1) CREATE AN ACCOUNT.\n\n2) LOG IN.\n\n3) EXIT.\n\nCHOICE : \033[0m");
   scanf("%d",&choice);
-  printf("\n\n");
+  printf("\n\n");//this is to maintain the 2 line break distance after the choice.
   getchar();
+
+
   if(choice == 1){
     createAccount();
   }
