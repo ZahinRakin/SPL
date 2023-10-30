@@ -1,3 +1,0 @@
-aB12!@
-public key(e): 3
-Multiplication of two prime numbers(n): 163687
