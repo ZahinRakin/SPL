@@ -1,17 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
+#include "header.h"
 
-char* customLengthPass(char*);
 char* randomLengthPass(char*);
+char* customLengthPass(char*);
 
 char* generatePassword(char* password){
   int choice;
-  printf("\033[1;37mDO YOU WANT TO DETERMINE THE LENGTH OF THE PASSWORD?\n\n1)\033[1;32mYES.\033[0m\n\n0)\033[0;31mNO.\033[0m\n\nchoice: ");
+  srand(time(NULL));
+  printf("\033[1;37mDo you want to determine the length of the password?\n\n1)\033[1;32mYes.\033[0m\n\n0)\033[0;31mNo.\033[0m\n\nchoice: ");
   scanf("%d",&choice);
   getchar();
   printf("\n\n");
-
-
   if(choice == 1){
     password = customLengthPass(password);
   }
@@ -19,17 +20,17 @@ char* generatePassword(char* password){
     password = randomLengthPass(password);
   }
   else {
-    printf("\033[1;31mWRONG COMMAND!\n\n");
+    printf("wrong command!\n");
   }
   return password;
 }
 
+
 char* customLengthPass(char* password){
   int length, i;
-  printf("\033[1;37mLENGTH\033[1;31m(length must be between 6 to 52):\033[0m ");
+  printf("\033[1;37mLength of your password \033[1;31m(length must be between 6 to 52):\033[0m ");
   scanf("%d",&length);
   printf("\n\n");
-
   length++;
   password = malloc((length)*sizeof(char));
   for(i = 0; i < length-1; i++){

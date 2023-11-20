@@ -1,6 +1,10 @@
 #include <stdio.h>
 
 int checkStrength(char* password,int length){
+  if(length < 6 || length > 52){
+    printf("\033[1;31mYOUR PASSWORD LENGTH ISN'T WITHING 6-52.\n\n\033[0m");
+    return -7;
+  }
   int count = 0;
   if(length >= 8 && length < 10){
     count++;
@@ -36,15 +40,21 @@ int checkStrength(char* password,int length){
     }
   }
   if(count == 7){
-    printf("\x1b[32mStrong\n\x1b[0m");
+    printf("\x1b[32m");
+    printf("Strong\n\n");
+    printf("\x1b[0m");
     return 2;
   }
   else if(count >= 5 && count < 7){
-    printf("\x1b[33mmedium\n\x1b[0m");
+    printf("\x1b[33m");
+    printf("medium\n\n");
+    printf("\x1b[0m");
     return 1;
   }
   else if(count < 5){
-    printf("\x1b[31mweak\n\x1b[0m");
+    printf("\x1b[31m");
+    printf("weak\n\n");
+    printf("\x1b[0m");
     return 0;
   }
 }

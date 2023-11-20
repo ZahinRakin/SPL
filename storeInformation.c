@@ -1,85 +1,108 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
+#include <stdlib.h>
 #include "header.h"
 
 void storeInformation(char* username){
   FILE *fp;
   int choice;
   char *password;
-  char password_2[53];
+  char takePass[53];
   char websiteAddress[100];
   char emailAddress[80];
+  int accountNumber = 1;
+  char line[100];
+  int lineNumber = 1;
 
-  fp = fopen(username,"a");
+  fp = fopen(username,"r");
   if(fp == NULL){
     printf("\033[1;31mFILE CANN'T BE OPENED!\n\n\033[0m");
     exit(1);
   }
+  while(fgets(line,sizeof(line),fp)){
+    if(((lineNumber-2)%5 == 0) && atoi(line) != 0){
+      accountNumber = atoi(line);
+      accountNumber++;
+    }
+    lineNumber++;
+  }
 
-  printf("\033[1;37mWEBSITE ADDRESS: \033[0m");
+  fclose(fp);
+  //this finds out the account number for indexing new accounts.
+  printf("\033[1;37mWebsite Address: \033[0m");
   scanf("%s",websiteAddress);
   getchar();
   printf("\n\n");
-  fprintf(fp,"%s\n",websiteAddress);//when neede i will encode here.
- 
+  //here the website address would be added to the file
 
-  printf("\033[1;37mEMAIL ADDRESS: \033[0m");
+  printf("\033[1;37mEmail Address: \033[0m");
   scanf("%s",emailAddress);
   getchar();
   printf("\n\n");
-  fprintf(fp,"%s\n",emailAddress);//when needed here i will encrypt.
+  //here the email address would be added to the file
+  //storing password porcess starts form now on.
 
-  printf("\033[1;37m1) GENERATE PASSWORD.\n\n2) GIVE PASSWORD.\n\n\033[1;32mCHOICE: \033[0m");
+
+  printf("\033[1;37m1) Generate Password.\n\n2) Give password.\n\n\033[1;32mchoice: \033[0m");
   scanf("%d",&choice);
   getchar();
   printf("\n\n");
 
   if(choice == 1){
     password = generatePassword(password);
-    fprintf(fp,"%s\n",password);
   }
   else if(choice == 2){
     again:
-    printf("\033[1;31mREMEMBER TO KEEP PASSWORD WITHIN 6-52 CHARACTER:\033[0m ");
-    scanf("%s",password_2);
-    printf("\n");
-
-    if(strlen(password_2) < 6 || strlen(password_2) > 52){
-      printf("\033[1;31mYOUR PASSWORD LENGTH ISN'T WITHIN 6-52 CHARACTERS.\n\n\033[0m");
-      goto again;
-    }
+    printf("\033[1;31mRemember to keep password within 6-52 character:\033[0m ");
+    scanf("%s",takePass);
     getchar();
-    int strength = checkStrength(password_2,strlen(password_2));
-
-    if(!strength){
+    printf("\n");
+    int strength = checkStrength(takePass,strlen(takePass));
+    if(strength <= 0){
       goto again;
     }
     else{
-      fprintf(fp,"%s\n",password_2);
+      password = takePass;
     }
   }
   else{
     printf("\033[1;31mWRONG COMMAND!\n\n\033[0m");
     exit(1);
   }
+
+
+  //opening the file for storing updated infos.
+  fp = fopen(username,"a");
+  if(fp == NULL){
+    printf("\033[1;31mFILE CANN'T BE OPENED!\n\n\033[0m");
+    exit(1);
+  }
+  //storing account informations..
+  fprintf(fp,"%d.\n",accountNumber);
+  fprintf(fp,"Wesite address: %s\n",websiteAddress);
+  fprintf(fp,"Email Address: %s\n",emailAddress);
+  fprintf(fp,"Password: %s\n",password);
+  fprintf(fp,"---------------------------------------------------------------------\n");
   fclose(fp);
 
 
-  printf("\033[1;32mWHAT DO YOU WANT TO DO NOW?\033[1;37m\n\n");
-  printf("1) STORE MORE INFORMATION.\n\n2) VIEW YOUR INFORMATION.\n\n3) RETURN HOME.\n\n\033[1;31m4) EXIT.\n\n\033[0;32mCHOICE: \033[0m");
+  printf("\033[1;32mWhat do you want to do now?\033[1;37m\n\n");
+  printf("1)Store more information.\n\n2) Return home.\n\n3) View your information.\n\n\033[1;31m4) exit.\n\nchoice: \033[0m");
+  
+  
   scanf("%d",&choice);
   getchar();
   printf("\n\n");
 
+
   if(choice == 1){
-    storeInformation(username);
+    storeInformation(username);//modified
   }
   else if(choice == 2){
-    viewInformation(username);
+    main();
   }
   else if(choice == 3){
-    main();
+    viewInformation(username);//modified
   }
   else if(choice == 4){
     exit(0);

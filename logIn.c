@@ -10,47 +10,45 @@ void logIn(){
   char line[55];
   char choice;
 
+
   again:
-  printf("\033[1;37mUSERNAME: \033[0m");
+  printf("\033[1;37musername: \033[0m");
   scanf("%s",username);
   getchar();
-  printf("\n");
+  printf("\n\n");
   strcat(username,".txt");
 
-  printf("\033[1;31mPASSWORD: \033[0m");
+  printf("\033[1;31mpassword: \033[0m");
   scanf("%s",password);
   getchar();
-  printf("\n");
+  printf("\n\n");
 
   fp = fopen(username,"r");
   if(fp == NULL){
-    printf("\033[1;31mNO ACCOUNT FOUND!\n\n\033[0m");
-    goto again;
+    printf("\033[1;31mYou don't have an account!\n\n\033[0m");
+    main();
   }
 
-  //READING THE PASSWORD FROM THE FILE.
   fgets(line, sizeof(line), fp);
   fclose(fp);
+
   if(line == NULL){
-    printf("\033[1;31mPROBLEM OCCURED WHILE READING THE FIRST LINE!\n\n\033[0m");
+    printf("\033[1;31mProblem occured while reading the first line\n\n\033[0m");
     exit(0);
   }
-  removeNewLine(line,strlen(line));
-
+  removeNewLine(line,strlen(line));//this code block reads the password;
 
   if(strcmp(line,password)){
-    printf("\033[1;31mWRONG PASSWORD!\n\n");
+    printf("\x1b[31m");
+    printf("Wrong password!\n");
+    printf("\x1b[0m");
     goto again;
   }
+  
 
-  printf("\033[1;37m");
-  printf("a) STORE INFORMATION.\n\n");
-  printf("b) VIEW INFORMATION.\n\n");
-  printf("c) EXIT.\n\n");
-  printf("CHOICE: \033[0m");
+  printf("\033[1;37ma) Store Information.\n\nb) View Information.\033[1;32m\n\nc) Update information\n\nchoice: ");
   scanf("%c",&choice);
-
-
+  printf("\n\n\033[0m");
   if(choice == 'a'){
     storeInformation(username);
   }
@@ -58,9 +56,11 @@ void logIn(){
     viewInformation(username);
   }
   else if(choice == 'c'){
-    exit(0);
+    updatePassword(username);
   }
   else{
-    printf("\033[1;31mWRONG COMMAND!\n\n\033[0m");
+    printf("\x1b[31m");
+    printf("Wrong command.\n");
+    printf("\x1b[0m");
   }
 }

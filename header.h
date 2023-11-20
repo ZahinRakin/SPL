@@ -11,5 +11,6 @@ char* randomLengthPass(char*);
 void removeNewLine(char*, int);
 void storeInformation(char*);
 void viewInformation(char*);
+void updatePassword(char*);
 
 #endif

@@ -3,4 +3,3 @@ void removeNewLine(char* str, int size){
     str[size-1] = '\0';
   }
 }
-//whenever i get a line using fgets. There remains a new line character at the end of string. It dusturbs so to remove that this method beomes handy.

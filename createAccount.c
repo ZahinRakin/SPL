@@ -16,26 +16,22 @@ void createAccount(){
   printf("\n\n");
   strcat(username,".txt");
 
-  printf("\033[1;37m1) GENERATE PASSWORD.\n\n2) GIVE PASSWORD.\n\n3) EXIT.\n\n\033[0;31m(character:6-52)\n\n\033[0;37mCHOICE: \033[0m");
+
+  printf("\033[0;37m1.Generate Password.\n\n2.Give Password.\033[0;31m(character:6-52)\n\n\033[0;37mChoice: \033[0m");
   scanf("%d",&choice);
-  printf("\n");
+  printf("\n\n");
   getchar();
+
 
   if(choice == 1){
     password = generatePassword(password);
-
-    printf("\033[1;37mHERE IS YOUR PASSWORD: \033[1;30m");
-    printf("%s",password);
-    printf("\033[0m");
-
-    //file creation
-    fp = fopen(username, "a"); //MODE A MOST PROBABLY WILL SATISFY MY HUNGER.
+    fp = fopen(username, "a");
     if(fp == NULL){
-      printf("ERROR WHILE OPEING THE FILE!\n");
+      printf("Error while opening file.\n");
       exit(1);
     }
-
     fprintf(fp,"%s\n",password);
+    fclose(fp);
   }
   else if(choice == 2){
     Again:
@@ -55,22 +51,19 @@ void createAccount(){
       goto Again;
     }
     else{
-      //file creation
-      fp = fopen(username, "a");//most probably a+ mode is not necessary.
+      fp = fopen(username, "a");
       if(fp == NULL){
-        printf("\033[1;31mERROR WHILE OPENING FILE!\n\033[0m\n");
+        printf("Error while opening file.\n");
         exit(1);
       }
       fprintf(fp,"%s\n",password_2);
+      fclose(fp);
     }
   }
-  else if(choice == 3){
-    exit(0);
-  }
   else {
-    printf("\033[1;31mWRONG COMMAND!\n\n\033[0m");
+    printf("\x1b[31m");
+    printf("Wrong command!\n");
+    printf("\x1b[0m");
   }
-  fclose(fp);
-  // keyGenerate(username);//this need the keygenerate file.
   main();
 } 
