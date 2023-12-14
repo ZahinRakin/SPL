@@ -1,5 +1,6 @@
 {
   "files.associations": {
-    "viewInformation.C": "cpp"
+    "viewInformation.C": "cpp",
+    "runner": "c"
   }
 }
