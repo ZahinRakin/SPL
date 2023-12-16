@@ -96,6 +96,8 @@ void uploadFile(int sockfd, char *filename)
   char file[30000] = "";
   char line[300];
   write(sockfd, filename, strlen(filename)); // filename transfered.
+  char temp[15];
+  read(sockfd, temp, 14);
   if ((fp = fopen(filename, "r")) == NULL)
   {
     perror("error opening file.\n");
