@@ -253,19 +253,28 @@ void updatePassword(char *username)
     printf("\033[1;31mCANN'T OPEN THE FILE!\n\n\033[0m");
     exit(1);
   }
+  char temp[100];
+  fgets(temp, sizeof(temp), fp1);
+  lineNumber++;
+  char number[10];
+  fgets(number, sizeof(number), fp1);
+  lineNumber++;
+  printf("%d.\n", atoi(number));
   while (fgets(line, sizeof(line), fp1))
   {
     if ((lineNumber - 2) % 5 && strncmp(line, "-----", 5))
     {
       output = invCipher(line, output, key);
-      line[0] = '\0';
-      bytesToString(output, line); // here since output is pointer it shouldn't work properly.
-      hexToString(line, line);
+      // line[0] = '\0';
+      // bytesToString(output, line); // here since output is pointer it shouldn't work properly.
+      // hexToString(line, line);
+      output[strlen(line)] = '\0';
+      printf("%s\n", output);
       free(output);
     }
-    if (lineNumber > 1)
+    else
     {
-      printf("%s\n", line);
+      printf("%s", line);
     }
     lineNumber++;
   }
@@ -331,6 +340,10 @@ void updatePassword(char *username)
     exit(1);
   }
   // it seems like the first line isn't getting printed. so i think here i might add another line to manually add that line.
+  char temppass[100];
+  fgets(temppass, sizeof(temppass), fp1);
+  fprintf(fp2, "%s", temppass);
+  lineNumber++;
   while (fgets(line, sizeof(line), fp1))
   {
     if ((lineNumber - 2) % 5 == 0 && atoi(line) != 0)
