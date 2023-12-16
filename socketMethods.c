@@ -1,6 +1,13 @@
-#include "header.h"
-#include <unistd.h>
-#include <arpa/inet.h>
+#include <arpa/inet.h> // inet_addr()
+#include <netdb.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <strings.h> // bzero()
+#include <sys/socket.h>
+#include <unistd.h> // read(), write(), close()
+#define PORT 8080
+#define SA struct sockaddr
 
 #define SIZE 1024
 
@@ -59,36 +66,39 @@ void recvFile(int sockfd)
 
 void download()
 {
-  char *ip = "127.0.0.1"; // this will change
-  int port = 8080;
-  int e;
+  int sockfd, connfd;
+  struct sockaddr_in servaddr, cli;
 
-  int sockfd;
-  struct sockaddr_in server_addr;
+  // socket create and verification
   sockfd = socket(AF_INET, SOCK_STREAM, 0);
-  if (sockfd < 0)
+  if (sockfd == -1)
   {
-    perror("[-]Error in socket");
-    exit(1);
+    printf("socket creation failed...\n");
+    exit(0);
   }
-  printf("[+]Server socket created. \n");
+  else
+    printf("Socket successfully created..\n");
+  bzero(&servaddr, sizeof(servaddr));
 
-  server_addr.sin_family = AF_INET;
-  server_addr.sin_port = port;
-  server_addr.sin_addr.s_addr = inet_addr(ip);
+  // assign IP, PORT
+  servaddr.sin_family = AF_INET;
+  servaddr.sin_addr.s_addr = inet_addr("192.168.0.104"); // this needs to be chagned.
+  servaddr.sin_port = htons(PORT);
 
-  e = connect(sockfd, (struct sockaddr *)&server_addr, sizeof(server_addr));
-  if (e == -1)
+  // connect the client socket to server socket
+  if (connect(sockfd, (SA *)&servaddr, sizeof(servaddr)) != 0)
   {
-    perror("[-]Error in Connecting");
-    exit(1);
+    printf("connection with the server failed...\n");
+    exit(0);
   }
-  printf("[+]Connected to server.\n");
-  //
+  else
+    printf("connected to the server..\n");
+
+  // function for chat
   recvFile(sockfd);
-  printf("[+] File data downloaded successfully. \n");
+
+  // close the socket
   close(sockfd);
-  printf("[+]Disconnected from the server. \n");
 }
 
 void uploadFile(int sockfd, char *filename)
@@ -118,36 +128,38 @@ void uploadFile(int sockfd, char *filename)
 
 void uploadToServer(char *username)
 {
-  char *ip = "127.0.0.1"; // this would change.
-  int port = 8080;
-  int e;
 
-  int sockfd;
-  struct sockaddr_in server_addr;
+  int sockfd, connfd;
+  struct sockaddr_in servaddr, cli;
+
+  // socket create and verification
   sockfd = socket(AF_INET, SOCK_STREAM, 0);
-  if (sockfd < 0)
+  if (sockfd == -1)
   {
-    perror("[-]Error in socket");
-    exit(1);
+    printf("socket creation failed...\n");
+    exit(0);
   }
-  printf("[+]Server socket created. \n");
+  else
+    printf("Socket successfully created..\n");
+  bzero(&servaddr, sizeof(servaddr));
 
-  server_addr.sin_family = AF_INET;
-  server_addr.sin_port = port;
-  server_addr.sin_addr.s_addr = inet_addr(ip);
+  // assign IP, PORT
+  servaddr.sin_family = AF_INET;
+  servaddr.sin_addr.s_addr = inet_addr("192.168.0.104");
+  servaddr.sin_port = htons(PORT);
 
-  e = connect(sockfd, (struct sockaddr *)&server_addr, sizeof(server_addr));
-  if (e == -1)
+  // connect the client socket to server socket
+  if (connect(sockfd, (SA *)&servaddr, sizeof(servaddr)) != 0)
   {
-    perror("[-]Error in Connecting");
-    exit(1);
+    printf("connection with the server failed...\n");
+    exit(0);
   }
-  printf("[+]Connected to server.\n");
-  //
-  // char filename[] = username;
+  else
+    printf("connected to the server..\n");
+
+  // function for chat
   uploadFile(sockfd, username);
-  //
-  printf("[+] File data send successfully. \n");
+
+  // close the socket
   close(sockfd);
-  printf("[+]Disconnected from the server. \n");
 }
