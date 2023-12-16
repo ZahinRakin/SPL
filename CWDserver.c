@@ -13,6 +13,7 @@ void sendFile(int sockfd)
     char password[100];
     char file[30000];
     char line[100];
+    char res[5];
     int e;
 
     read(sockfd, filename, sizeof(filename)); // read the filename.
@@ -37,6 +38,7 @@ void sendFile(int sockfd)
     }
     printf("authentication successful\n");
     write(sockfd, "TRUE", 4); // response if the pass match.
+    read(sockfd, res, 4);
     // now start file transfering.
     while (fgets(line, sizeof(line), fp))
     {

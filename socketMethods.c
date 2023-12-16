@@ -34,6 +34,7 @@ void recvFile(int sockfd)
   write(sockfd, password, strlen(password)); // sending the password.
 
   read(sockfd, file, 5); // recving if the authentication is alright or not.
+  write(sockfd, "send", 4);
 
   if (strncmp(file, "TRUE", 4))
   {

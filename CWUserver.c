@@ -12,6 +12,7 @@ void recvFile(int sockfd)
     char file[30000];
     char filename[100];
     read(sockfd, filename, sizeof(filename));
+    write(sockfd, "filename recvd", 14);
 
     if ((fp = fopen(filename, "w")) == NULL)
     {
